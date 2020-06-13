@@ -47,10 +47,10 @@ class NeuralNetwork(object):
 
         '''
 
-        hidden_inputs = np.dot(X.reshape(1,-1),self.weights_input_to_hidden) # signals into hidden layer
+        hidden_inputs = X.reshape(1,-1) @ self.weights_input_to_hidden # signals into hidden layer
         hidden_outputs = self.activation_function(hidden_inputs) # signals from hidden layer
 
-        final_inputs = np.dot(hidden_outputs.reshape(1,-1),self.weights_hidden_to_output) # signals into final output layer
+        final_inputs = hidden_outputs.reshape(1,-1) @ self.weights_hidden_to_output # signals into final output layer
         final_outputs = final_inputs # signals from final output layer
 
         return final_outputs, hidden_outputs
@@ -74,8 +74,8 @@ class NeuralNetwork(object):
         hidden_error = output_error_term @ self.weights_hidden_to_output.T # 1 by n-hidden
         hidden_error_term = hidden_error * hidden_outputs * (1-hidden_outputs)  # 1 by n-hidden
 
-        delta_weights_h_o += hidden_outputs.T * output_error_term  # n-hidden by n-output
-        delta_weights_i_h += X.reshape(-1,1).dot(hidden_error_term) # n-features by n-hidden
+        delta_weights_h_o += hidden_outputs.T @ output_error_term  # n-hidden by n-output
+        delta_weights_i_h += X.reshape(-1,1) @ hidden_error_term # n-features by n-hidden
 
         return delta_weights_i_h, delta_weights_h_o
 
@@ -112,8 +112,7 @@ class NeuralNetwork(object):
 #########################################################
 # Set your hyperparameters here
 ##########################################################
-batch_size = 128
-iterations = 10000
-learning_rate = 1/np.sqrt(batch_size)
+iterations = 13000
+learning_rate = 1/np.sqrt(128)
 hidden_nodes = 6
 output_nodes = 1
